@@ -4,22 +4,33 @@ import styles from "./page.module.css";
 
 export default function Home() {
   const [input, setInput] = useState("");
+  const [items, setItems] = useState([]);
 
-  let list = [];
+  const handleAdd = () => {
+    if (input.trim() !== "") {
+      setItems([...items, input]); // Add the input value to the array
+      setInput(""); // Clear the input field
+    }
+  };
 
   const handleInputChange = (event) => {
     setInput(event.target.value);
   };
-  const handleAdd = (event) => {
-    console.log(input);
-  };
+  // const handleAdd = (event) => {
+  //   console.log(input);
+  // };
 
   return (
     <div className={styles.page}>
       <div className={styles.todo}>
         <h1>To-Do list</h1>
         <div className={styles.inputContainer}>
-          <input type="text" value={input} onChange={handleInputChange} />
+          <input
+            type="text"
+            value={input}
+            onChange={handleInputChange}
+            placeholder="Хийх ажлаа бич..."
+          />
           <button type="submit" onClick={handleAdd}>
             Add
           </button>
@@ -29,7 +40,19 @@ export default function Home() {
           <button>Active</button>
           <button>Completed</button>
         </div>
-        <p>No tasks yet. Add one above!</p>
+        <div className={styles.taskContainer}>
+          {items.length > 0 ? (
+            items.map((task, index) => (
+              <div key={index} className={styles.task}>
+                <input type="checkbox" disabled={task.completed} />
+                {task}
+                <button>Delete</button>
+              </div>
+            ))
+          ) : (
+            <p>No tasks yet. Add one above!</p>
+          )}
+        </div>
       </div>
 
       <div className={styles.poweredText}>
