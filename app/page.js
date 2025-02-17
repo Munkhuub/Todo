@@ -8,18 +8,43 @@ export default function Home() {
 
   const handleAdd = () => {
     if (input.trim() !== "") {
-      setItems([...items, input]); // Add the input value to the array
-      setInput(""); // Clear the input field
+      setItems([...items, { text: input, isCompleted: false }]);
+      setInput("");
     }
   };
 
   const handleInputChange = (event) => {
     setInput(event.target.value);
   };
-  // const handleAdd = (event) => {
-  //   console.log(input);
-  // };
 
+  const handleCheckbox = (index) => {
+    setItems((task) =>
+      task.map((item, i) => {
+        if (i === index) {
+          return { ...item, isCompleted: !item.isCompleted };
+        } else {
+          return item;
+        }
+      })
+    );
+    // setItems((prev) =>
+    //   prev.map((item, i) =>
+    //     index == i ? { ...item, isCompleted: !item.isCompleted } : item
+    //   )
+    // );
+  };
+  // const handleDelete = (index) => {
+  //   setItems(
+  //     items.filter((_, i) => {
+  //       if (i !== index) {
+  //         return true;
+  //       }
+  //     })
+  //   );
+  // };
+  const handleDelete = (index) => {
+    setItems((prev) => prev.filter((_, i) => i !== index));
+  };
   return (
     <div className={styles.page}>
       <div className={styles.todo}>
@@ -44,9 +69,20 @@ export default function Home() {
           {items.length > 0 ? (
             items.map((task, index) => (
               <div key={index} className={styles.task}>
-                <input type="checkbox" disabled={task.completed} />
-                {task}
-                <button>Delete</button>
+                <input
+                  type="checkbox"
+                  checked={task.isCompleted}
+                  onChange={() => handleCheckbox(index)}
+                />
+                <div
+                  style={{
+                    textDecoration:
+                      task.isCompleted == true ? "line-through" : "",
+                  }}
+                >
+                  {task.text}
+                </div>
+                <button onClick={() => handleDelete(index)}>Delete</button>
               </div>
             ))
           ) : (
