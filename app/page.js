@@ -6,6 +6,8 @@ export default function Home() {
   const [input, setInput] = useState("");
   const [items, setItems] = useState([]);
 
+  const [buttonValue, setButtonValue] = useState("");
+
   const handleAdd = () => {
     if (input.trim() !== "") {
       setItems([...items, { text: input, isCompleted: false }]);
@@ -27,24 +29,24 @@ export default function Home() {
         }
       })
     );
-    // setItems((prev) =>
-    //   prev.map((item, i) =>
-    //     index == i ? { ...item, isCompleted: !item.isCompleted } : item
-    //   )
-    // );
   };
-  // const handleDelete = (index) => {
-  //   setItems(
-  //     items.filter((_, i) => {
-  //       if (i !== index) {
-  //         return true;
-  //       }
-  //     })
-  //   );
-  // };
+
   const handleDelete = (index) => {
     setItems((prev) => prev.filter((_, i) => i !== index));
   };
+
+  const filteredList = items.filter((item, index) => {
+    if (buttonValue === "all") {
+      return true;
+    }
+    if (buttonValue === "active") {
+      return !item.isCompleted;
+    }
+    if (buttonValue === "completed") {
+      return item.isCompleted;
+    }
+  });
+
   return (
     <div className={styles.page}>
       <div className={styles.todo}>
@@ -61,9 +63,11 @@ export default function Home() {
           </button>
         </div>
         <div className={styles.buttons}>
-          <button className={styles.all}>All</button>
-          <button>Active</button>
-          <button>Completed</button>
+          <button onClick={() => setButtonValue("all")} className={styles.all}>
+            All
+          </button>
+          <button onClick={() => setButtonValue("active")}>Active</button>
+          <button onClick={() => setButtonValue("completed")}>Completed</button>
         </div>
         <div className={styles.taskContainer}>
           {items.length > 0 ? (
@@ -98,33 +102,3 @@ export default function Home() {
     </div>
   );
 }
-// arr.map yvna, shine array ruu pushleh
-// export default function Home() {
-//   const [count, setCount] = useState(0);
-//   const [text, setText] = useState("");
-//   const handleInc = () => {
-//     setCount(count + 1);
-//   };
-//   const handleMinus = () => {
-//     setCount(count - 1);
-//   };
-//   const handleInputChange = (event) => {
-//     setText(event.target.value);
-//   };
-
-//   return (
-//     <div className={styles.page} style={{ margin: "auto" }}>
-//       <div>
-//         <button onClick={handleInc}>Plus</button>
-
-//         <button onClick={handleMinus}>Minus</button>
-
-//         <p>Count: {count}</p>
-//       </div>
-//       <div>
-//         <input type="text" onChange={handleInputChange} value={text}></input>
-//         <div>{text.length}</div>
-//       </div>
-//     </div>
-//   );
-// }
