@@ -5,9 +5,7 @@ import styles from "./page.module.css";
 export default function Home() {
   const [input, setInput] = useState("");
   const [items, setItems] = useState([]);
-
-  const [buttonValue, setButtonValue] = useState("");
-
+  const [buttonValue, setButtonValue] = useState("all");
   const handleAdd = () => {
     if (input.trim() !== "") {
       setItems([...items, { text: input, isCompleted: false }]);
@@ -47,6 +45,21 @@ export default function Home() {
     }
   });
 
+  const checkedList = items.filter((item) => {
+    if (item.isCompleted == true) {
+      return true;
+    }
+  });
+  // const taskCount = ({ items }) => {
+  //   let number = 0;
+  //   items.map((item) => {
+  //     if (item.isCompleted === true) {
+  //       return number++;
+  //     }
+  //     return number;
+  //   });
+  // };
+
   return (
     <div className={styles.page}>
       <div className={styles.todo}>
@@ -58,20 +71,31 @@ export default function Home() {
             onChange={handleInputChange}
             placeholder="Хийх ажлаа бич..."
           />
-          <button type="submit" onClick={handleAdd}>
-            Add
-          </button>
+          <button onClick={handleAdd}>Add</button>
         </div>
         <div className={styles.buttons}>
-          <button onClick={() => setButtonValue("all")} className={styles.all}>
+          <button
+            onClick={() => setButtonValue("all")}
+            className={buttonValue === "all" ? styles.activeButton : ""}
+          >
             All
           </button>
-          <button onClick={() => setButtonValue("active")}>Active</button>
-          <button onClick={() => setButtonValue("completed")}>Completed</button>
+          <button
+            onClick={() => setButtonValue("active")}
+            className={buttonValue === "active" ? styles.activeButton : ""}
+          >
+            Active
+          </button>
+          <button
+            onClick={() => setButtonValue("completed")}
+            className={buttonValue === "completed" ? styles.activeButton : ""}
+          >
+            Completed
+          </button>
         </div>
         <div className={styles.taskContainer}>
-          {items.length > 0 ? (
-            items.map((task, index) => (
+          {filteredList.length > 0 ? (
+            filteredList.map((task, index) => (
               <div key={index} className={styles.task}>
                 <input
                   type="checkbox"
@@ -92,6 +116,12 @@ export default function Home() {
           ) : (
             <p>No tasks yet. Add one above!</p>
           )}
+        </div>
+        <div className="line"></div>
+        <div className="trackTask">
+          <p>
+            {checkedList.length} out of {filteredList.length} tasks completed
+          </p>
         </div>
       </div>
 

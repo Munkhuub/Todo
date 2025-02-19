@@ -50,10 +50,7 @@
   margin-top: 12px;
   font-size: 14px;
 }
-.all {
-  color: white;
-  background-color: rgba(60, 130, 246, 1);
-}
+
 .poweredText {
   display: flex;
   gap: 4px;
@@ -89,4 +86,8 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+.activeButton {
+  color: white;
+  background-color: rgba(60, 130, 246, 1);
 }
