@@ -6,10 +6,12 @@ export default function Home() {
   const [input, setInput] = useState("");
   const [items, setItems] = useState([]);
   const [buttonValue, setButtonValue] = useState("all");
+  const [uid, setUid] = useState(0);
   const handleAdd = () => {
     if (input.trim() !== "") {
-      setItems([...items, { text: input, isCompleted: false }]);
+      setItems([...items, { text: input, isCompleted: false, id: uid }]);
       setInput("");
+      setUid(uid + 1);
     }
   };
 
@@ -17,20 +19,16 @@ export default function Home() {
     setInput(event.target.value);
   };
 
-  const handleCheckbox = (index) => {
-    setItems((task) =>
-      task.map((item, i) => {
-        if (i === index) {
-          return { ...item, isCompleted: !item.isCompleted };
-        } else {
-          return item;
-        }
-      })
-    );
+  const handleCheckbox = (id) => {
+    const newItems = [...items];
+    const index = newItems.findIndex((item) => item.id === id);
+    newItems[index].isCompleted = !newItems[index].isCompleted;
+    setItems(newItems);
   };
 
-  const handleDelete = (index) => {
-    setItems((prev) => prev.filter((_, i) => i !== index));
+  const handleDelete = (id) => {
+    const newItems = items.filter((item) => item.id !== id);
+    setItems(newItems);
   };
 
   const filteredList = items.filter((item, index) => {
@@ -50,6 +48,9 @@ export default function Home() {
       return true;
     }
   });
+  const handleClearCompleted = () => {
+    setItems((prev) => filteredList.filter((items) => !items.isCompleted));
+  };
   // const taskCount = ({ items }) => {
   //   let number = 0;
   //   items.map((item) => {
@@ -100,7 +101,7 @@ export default function Home() {
                 <input
                   type="checkbox"
                   checked={task.isCompleted}
-                  onChange={() => handleCheckbox(index)}
+                  onChange={() => handleCheckbox(task.id)}
                 />
                 <div
                   style={{
@@ -110,18 +111,19 @@ export default function Home() {
                 >
                   {task.text}
                 </div>
-                <button onClick={() => handleDelete(index)}>Delete</button>
+                <button onClick={() => handleDelete(task.id)}>Delete</button>
               </div>
             ))
           ) : (
             <p>No tasks yet. Add one above!</p>
           )}
         </div>
-        <div className="line"></div>
-        <div className="trackTask">
-          <p>
+        <div className={styles.line}></div>
+        <div className={styles.trackTask}>
+          <p className={styles.count}>
             {checkedList.length} out of {filteredList.length} tasks completed
           </p>
+          <div onClick={handleClearCompleted}>Clear completed</div>
         </div>
       </div>
 

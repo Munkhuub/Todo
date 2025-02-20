@@ -45,7 +45,7 @@
   border-radius: 6px;
   border: none;
 }
-.todo p {
+.todo > p {
   color: rgba(107, 114, 128, 1);
   margin-top: 12px;
   font-size: 14px;
@@ -90,4 +90,13 @@
 .activeButton {
   color: white;
   background-color: rgba(60, 130, 246, 1);
+}
+.trackTask {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-top: 12px;
+}
+.trackTask div {
+  color: #ef4444;
 }
